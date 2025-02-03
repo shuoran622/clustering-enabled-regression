@@ -16,7 +16,8 @@ This folder contains the functions we developed for our proposed clustering-enab
 
 ## Example
 - **run\_sample.m**: This function provides an example of running our algorithm and performing analysis using the provided sample data in **sample_data.mat**.
-- If successfully run through our algorithm, you will get the region clusters shown below, with numbers indicating the region index:
+ 
+ If successfully run through our algorithm, you will get the region clusters shown below, with numbers indicating the region index:
 
   <img src="sample_images/cluster_res.png" alt="clusters" width="500">
   
