@@ -10,7 +10,7 @@ option.mite = 2000; % Total MCMC iterations
 option.K = 'auto'; % Inital number of clusters, can be 'auto' or a numerical value. 
                    % If K is set to 'auto', then K is determined by the bulit-in method. 
 
-option.output = 'outputs3'; % Path for outputs     
+option.output = 'outputs'; % Path for outputs     
             
 %% Run MCMC algorithm for clustering-enabled regression
 rng(1)
