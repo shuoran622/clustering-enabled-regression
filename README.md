@@ -25,7 +25,7 @@ This folder contains the functions we developed for our proposed clustering-enab
  
 
 <table>
-  <tr style="background-color: white;">
+  <tr>
     <td>
       <figure style="text-align: center;">
         <img src="sample_images/trajectory_between_cluster_1_and_cluster_1.png" alt="clusters" width="250">
@@ -45,20 +45,20 @@ This folder contains the functions we developed for our proposed clustering-enab
       </figure>
     </td>
   </tr>
-  <tr style="background-color: white;">
-    <td>
+  <tr>
+    <td style="background-color: white;">
       <figure style="text-align: center;">
         <img src="sample_images/trajectory_between_cluster_2_and_cluster_2.png" alt="clusters" width="250">
         <figcaption>Cluster 2 ↔ Cluster 2</figcaption>
       </figure>
     </td>
-    <td>
+    <td style="background-color: white;">
       <figure style="text-align: center;">
         <img src="sample_images/trajectory_between_cluster_2_and_cluster_3.png" alt="clusters" width="250">
         <figcaption>Cluster 2 ↔ Cluster 3</figcaption>
       </figure>
     </td>
-    <td>
+    <td style="background-color: white;">
       <figure style="text-align: center;">
         <img src="sample_images/trajectory_between_cluster_3_and_cluster_3.png" alt="clusters" width="250">
         <figcaption>Cluster 3 ↔ Cluster 3</figcaption>
