@@ -1,7 +1,22 @@
-function [B_all, M_all, p_all, sigma_sq_all, delta_sq_all] = ...
-    Gibbs_sampling(mite, FC, X, B0, M0, p0, sigma_sq0, delta_sq0,...
-    Gam0, ind_batch, alpha, rho0, varrho0)
+function [MCMC_outputs, Gam0] = ...
+    Gibbs_sampling(mite, X, initial_values, ind_batch, rho0, varrho0, output)
 
+
+disp('---------- Perform Gibbs sampling ----------')
+
+
+%%
+FC = initial_values.FC_norm;
+
+B0 = initial_values.B0;
+sigma_sq0 = initial_values.sigma_sq0;
+M0 = initial_values.M0;
+Gam0 = initial_values.Gam0;
+delta_sq0 = initial_values.delta_sq0;
+p0 = initial_values.p0;
+alpha = initial_values.alpha;
+
+%%
 % Store Initialized Parameters
 [d,~,S] = size(FC);
 [~,q] = size(X);
@@ -30,7 +45,8 @@ tmp_FC = permute(FC,[3 1 2]);
 %% Run Gibbs Sampling
 while ite <= mite
     if mod(ite, 10) == 0
-        fprintf('MCMC Iteration %d \n', ite)
+        %fprintf('MCMC Iteration %d \n', ite)
+        disp(strcat('MCMC iterations:', {' '}, string(ite), '/', string(mite)))
     end
     
     %% Update R
@@ -107,6 +123,56 @@ while ite <= mite
 end
 
 
+%% Match the dimensionality of results to the number of original brain regions
+d = initial_values.d;
+id_include_region = initial_values.id_include_region;
+
+if length(id_include_region) < d
+    
+    K = size(M_all,1);
+    num_batch = size(ind_batch,2);
+    tmp_M_all = zeros(K,d,mite+1); 
+    tmp_M_all(1:K,id_include_region,:) = M_all;
+    
+    tmp_sigma_sq_all = NaN(d,d,mite+1);
+    tmp_delta_sq_all = NaN(d,d,num_batch,mite+1);
+    
+    tmp_sigma_sq_all(id_include_region,id_include_region,:) = sigma_sq_all;
+    tmp_delta_sq_all(id_include_region,id_include_region,1:(num_batch-1),:) = delta_sq_all;
+    % add delta_sq = 1 for the last batch
+    tmp_gam0 = Gam0;
+    tmp_gam0(tmp_gam0 == 0) = NaN;
+    for i = 1:(mite+1)
+        tmp_delta_sq_all(id_include_region,id_include_region,num_batch,i) = tmp_gam0;
+    end
+    tmp_Gam0 = zeros(d,d);
+    tmp_Gam0(id_include_region,id_include_region) = Gam0;
+     
+    M_all = tmp_M_all;   
+    sigma_sq_all = tmp_sigma_sq_all;
+    delta_sq_all = tmp_delta_sq_all;  
+    Gam0 = tmp_Gam0;
+    
+end
+
+
+%%
+MCMC_outputs = struct(...
+    'B_all', B_all,... 
+    'M_all', M_all,...
+    'p_all', p_all,... 
+    'sigma_sq_all', sigma_sq_all,...
+    'delta_sq_all', delta_sq_all);
+
+
+save_path = strcat(output,'/MCMC_outputs.mat');
+save(save_path, 'MCMC_outputs', '-v7.3');
+
+
+fprintf('MCMC outputs saved as %s\n', save_path);
+
+
+disp('---------- Done ----------')
 
 
 end

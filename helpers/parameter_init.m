@@ -1,7 +1,10 @@
-function [B0,sigma_sq0,M0,Gam0,delta_sq0,p0,K,alpha] = ...
-    parameter_init(FC_norm, X_norm, ind_batch, Gam0, K, FC_test_pred_mat)
+function initial_values = ...
+    parameter_init(FC_norm, X_norm, ind_batch, Gam0, K, FC_test_pred_mat, output)
 
-[d,~,S] = size(FC_norm);
+%%
+disp('---------- Parameter initialization for Gibbs sampling ----------')
+
+[d,~,~] = size(FC_norm);
 
 FC_permu = permute(FC_norm,[3 1 2]); % easy-to-use
 
@@ -106,6 +109,74 @@ for l = 1:q
 end
 
 B0(isnan(B0)) = 0;
+
+
+%%
+[d, ~] = size(Gam0);
+
+Gam0_sym = tril(Gam0,-1) + tril(Gam0,-1)';
+
+Gam0_sym_sum = zeros(d,1);
+for i = 1:d
+    Gam0_sym_sum(i) = nansum(Gam0_sym(i,:)) + nansum(Gam0_sym(:,i));
+end
+
+id_include_region = find(Gam0_sym_sum > 0);
+
+Gam0 = Gam0(id_include_region,id_include_region);
+sigma_sq0 = sigma_sq0(id_include_region,id_include_region);
+delta_sq0 = delta_sq0(id_include_region,id_include_region,:);
+
+FC_norm = FC_norm(id_include_region,id_include_region,:);
+
+M0 = M0(:,id_include_region);
+
+id_include_cluster = find(sum(M0,2) > 0);
+
+K2 = length(id_include_cluster);
+
+disp('Exclude regions with no edges')
+disp(strcat('Remaining number of regions:', {' '}, string(size(M0,2))));
+
+% If remove an entire cluster
+if K2 < K  
+    disp('')
+    M0 = M0(id_include_cluster,:);
+    B0 = B0(id_include_cluster,id_include_cluster,:);
+    alpha = 1/K2.*ones(K2,1);
+    p0 = alpha;
+    disp(strcat('Number of clusters decreased due to excluding regions'))
+    disp(strcat('Number of clusters:', {' '}, string(size(M0,1))));
+else
+    disp(strcat('Number of clusters:', {' '}, string(K)));
+end
+
+
+%%
+initial_values = struct(...
+    'FC_norm', FC_norm,...
+    'B0', B0,...
+    'sigma_sq0', sigma_sq0,...
+    'M0', M0,...
+    'Gam0', Gam0,...
+    'delta_sq0', delta_sq0,...
+    'p0', p0,...
+    'alpha', alpha,...
+    'id_include_region', id_include_region,...
+    'id_include_cluster', id_include_cluster, ...
+    'K', K, ...
+    'd', d);
+    
+
+
+save_path = strcat(output,'/initial_values.mat');
+save(save_path, 'initial_values', '-v7.3');
+
+
+fprintf('Initial values saved as %s\n', save_path);
+
+
+disp('---------- Done ----------')
 
 
 end

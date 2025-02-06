@@ -1,4 +1,4 @@
-function [] = plot_traj(k1, k2, B_all_sorted, data_info)
+function [] = plot_traj(k1, k2, B_all_sorted, data_info, output)
 
     mu = data_info.mean_X;
     sigma = data_info.std_X;
@@ -64,7 +64,7 @@ function [] = plot_traj(k1, k2, B_all_sorted, data_info)
     %% Trajectories Plot
     linewidth = 4;
 
-    figure('Position',[0 0 720 595]);
+    figure('Units', 'normalized', 'Position', [0.1 0.1 0.6 0.8]);
     plot(NaN, NaN, 'Color', 'b',...
         'LineWidth', linewidth, 'LineStyle', ':')
     hold on;
@@ -87,9 +87,28 @@ function [] = plot_traj(k1, k2, B_all_sorted, data_info)
     plot(tmp_x, y_F_l_all,  'Color', 'r',...
         'LineWidth', linewidth);
 
+    
+    tmp_y_min = min([y_M_u_all(:); y_F_u_all(:); y_M_l_all(:); y_F_l_all(:)]);
+    tmp_y_max = max([y_M_u_all(:); y_F_u_all(:); y_M_l_all(:); y_F_l_all(:)]);
+    ylim([tmp_y_min-0.25, tmp_y_max+0.25]);
+    xlim([age_min-5, age_max+5])
+    
     legend({'Male', 'Female'}, 'Location', 'best');
     legend boxoff
+   
     
-    set(gca, 'FontSize',  35)
+    set(gca, 'FontSize',  45)
+    
+    
+    savepath = strcat(output,...
+            '/trajectory_between_cluster_', string(min([k1 k2])),...
+            '_and_cluster_',string(max([k1 k2])),'.png');
+    saveas(gca, savepath);
+    
+    fprintf('Trajectory plot between cluster %d and cluster %d saved as %s\n',...
+        min([k1 k2]), max([k1 k2]), savepath);
+    
+    close all
+    
 
 end

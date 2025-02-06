@@ -15,16 +15,57 @@ This folder contains the functions we developed for our proposed clustering-enab
 
 
 ## Example
-- **run\_sample.m**: This function provides an example of running our algorithm and performing analysis using the provided sample data in **sample_data.mat**.
+- **run\_sample.m**: This function demonstrates how to execute our algorithm by analyzing the provided sample dataset, **sample_data.mat**, which includes synthetic data from 560 subjects, comprising age, sex, site, and FC matrices for 16 regions (Fisher's z transformed Pearson correlation).
  
  If successfully run through our algorithm, you will get the region clusters shown below, with numbers indicating the region index:
 
   <img src="sample_images/cluster_res.png" alt="clusters" width="500">
   
- and the trajectory plot between cluster 1 and 2 is shown below:
+ and the trajectory plots between each pair of region clusters are shown below:
  
- <img src="sample_images/traj_1_2.png" alt="clusters" width="500">
- 
+
+<table>
+  <tr style="background-color: white;">
+    <td>
+      <figure style="text-align: center;">
+        <img src="sample_images/trajectory_between_cluster_1_and_cluster_1.png" alt="clusters" width="250">
+        <figcaption>Cluster 1 ↔ Cluster 1</figcaption>
+      </figure>
+    </td>
+    <td>
+      <figure style="text-align: center;">
+        <img src="sample_images/trajectory_between_cluster_1_and_cluster_2.png" alt="clusters" width="250">
+        <figcaption>Cluster 1 ↔ Cluster 2</figcaption>
+      </figure>
+    </td>
+    <td>
+      <figure style="text-align: center;">
+        <img src="sample_images/trajectory_between_cluster_1_and_cluster_3.png" alt="clusters" width="250">
+        <figcaption>Cluster 1 ↔ Cluster 3</figcaption>
+      </figure>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <td>
+      <figure style="text-align: center;">
+        <img src="sample_images/trajectory_between_cluster_2_and_cluster_2.png" alt="clusters" width="250">
+        <figcaption>Cluster 2 ↔ Cluster 2</figcaption>
+      </figure>
+    </td>
+    <td>
+      <figure style="text-align: center;">
+        <img src="sample_images/trajectory_between_cluster_2_and_cluster_3.png" alt="clusters" width="250">
+        <figcaption>Cluster 2 ↔ Cluster 3</figcaption>
+      </figure>
+    </td>
+    <td>
+      <figure style="text-align: center;">
+        <img src="sample_images/trajectory_between_cluster_3_and_cluster_3.png" alt="clusters" width="250">
+        <figcaption>Cluster 3 ↔ Cluster 3</figcaption>
+      </figure>
+    </td>
+  </tr>
+</table>
 
 
 
